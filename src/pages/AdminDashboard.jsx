@@ -11,15 +11,36 @@ import { getEvents, createEvent, updateEvent, deleteEvent } from '../services/ev
 import {
   getAdmins, addAdmin, deleteAdmin, updateAdmin,
 } from '../services/adminService';
+import { getSiteInfo, setSiteInfo } from '../services/adminService';
 import { uploadMedia } from '../services/uploadService';
 import { useNavigate } from 'react-router-dom';
 import styles from '../styles/global.module.css';
+import AdminHeader from '../components/AdminHeader';
+import Toast from '../components/Toast';
+import ConfirmModal from '../components/ConfirmModal';
 
 export function AdminDashboard() {
   const [news, setNews] = useState([]);
   const [students, setStudents] = useState([]);
   const [admins, setAdmins] = useState([]);
+  const [siteInfo, setSiteInfoState] = useState({ about: '', quickLinks: [] });
+  const [toastMsg, setToastMsg] = useState('');
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmIndex, setConfirmIndex] = useState(null);
+  const [toastVariant, setToastVariant] = useState('info');
+  const [quickLinkError, setQuickLinkError] = useState('');
   const navigate = useNavigate();
+
+  const scrollToSection = (id) => {
+    try {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // add a temporary highlight class
+      el.classList.add(styles.flashHighlight);
+      setTimeout(() => { el.classList.remove(styles.flashHighlight); }, 1400);
+    } catch (e) { /* ignore */ }
+  };
 
   const [newNotice, setNewNotice] = useState({
     title: '', summary: '', details: '', file: null,
@@ -43,10 +64,16 @@ export function AdminDashboard() {
     getStudents().then(setStudents);
     getAdmins().then(setAdmins);
     getEvents().then(setEvents);
+    // load site info
+    try {
+      const si = getSiteInfo();
+      if (si) setSiteInfoState({ about: si.about || '', quickLinks: si.quickLinks || [] });
+    } catch (err) { /* ignore */ }
   }, []);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    try { localStorage.removeItem('dev_admin'); } catch (e) { /* ignore */ }
+    try { await supabase.auth.signOut(); } catch (e) { /* ignore */ }
     navigate('/login');
   };
 
@@ -153,27 +180,9 @@ export function AdminDashboard() {
 
   return (
     <main className={styles.container}>
-      <div className={styles.hero}>
-        <div>
-          <h2 className={styles.pageTitle}>Admin Dashboard</h2>
-          <p className={styles.lead}>Manage announcements, events, students, and admins</p>
-        </div>
-        <div>
-          <button className={styles.btnDanger} onClick={handleLogout}>Logout</button>
-        </div>
-      </div>
+      <AdminHeader title="Admin Dashboard" subtitle="Manage announcements, events, students, and admins" onLogout={handleLogout} />
 
-      <section>
-        <h3>Create News</h3>
-  <input id="notice-title" name="notice-title" className={styles.formInput} placeholder="Title" value={newNotice.title} onChange={e => setNewNotice({ ...newNotice, title: e.target.value })} />
-  <input id="notice-summary" name="notice-summary" className={styles.formInput} placeholder="Summary" value={newNotice.summary} onChange={e => setNewNotice({ ...newNotice, summary: e.target.value })} />
-  <textarea className={styles.formInput} placeholder="Details" value={newNotice.details} onChange={e => setNewNotice({ ...newNotice, details: e.target.value })} />
-        {/* media_type removed - admin attaches files directly */}
-  <input id="notice-file" name="notice-file" type="file" onChange={e => setNewNotice({ ...newNotice, file: e.target.files[0] })} />
-  <button className={styles.btnPrimary} onClick={handleCreateNotice}>Create</button>
-      </section>
-
-      <section>
+      <section id="events">
         <h3>Events</h3>
   <input id="event-title" name="event-title" className={styles.formInput} placeholder="Title" value={newEvent.title} onChange={e => setNewEvent({ ...newEvent, title: e.target.value })} />
   <input id="event-date" name="event-date" className={styles.formInput} placeholder="Date" type="date" value={newEvent.date} onChange={e => setNewEvent({ ...newEvent, date: e.target.value })} />
@@ -206,18 +215,113 @@ export function AdminDashboard() {
           ))}
         </div>
       </section>
-
       <section>
         <h3>Analytics</h3>
         <div className={styles.grid}>
-          <div className={styles.notice}><h3>News</h3><p>{news.length}</p></div>
-          <div className={styles.notice}><h3>Students</h3><p>{students.length}</p></div>
-          <div className={styles.notice}><h3>Admins</h3><p>{admins.length}</p></div>
-          <div className={styles.notice}><h3>Events</h3><p>{events.length}</p></div>
+          <div className={styles.notice}>
+            <h3>News</h3>
+            <p>{news.length}</p>
+            <div><button className={styles.smallLink} onClick={() => scrollToSection('active-news')}>View News</button></div>
+          </div>
+          <div className={styles.notice}>
+            <h3>Students</h3>
+            <p>{students.length}</p>
+            <div><button className={styles.smallLink} onClick={() => scrollToSection('students')}>View Students</button></div>
+          </div>
+          <div className={styles.notice}>
+            <h3>Admins</h3>
+            <p>{admins.length}</p>
+            <div><button className={styles.smallLink} onClick={() => scrollToSection('admins')}>View Admins</button></div>
+          </div>
+          <div className={styles.notice}>
+            <h3>Events</h3>
+            <p>{events.length}</p>
+            <div><button className={styles.smallLink} onClick={() => scrollToSection('events')}>View Events</button></div>
+          </div>
         </div>
       </section>
 
       <section>
+        <h3>Create News</h3>
+  <input id="notice-title" name="notice-title" className={styles.formInput} placeholder="Title" value={newNotice.title} onChange={e => setNewNotice({ ...newNotice, title: e.target.value })} />
+  <input id="notice-summary" name="notice-summary" className={styles.formInput} placeholder="Summary" value={newNotice.summary} onChange={e => setNewNotice({ ...newNotice, summary: e.target.value })} />
+  <textarea className={styles.formInput} placeholder="Details" value={newNotice.details} onChange={e => setNewNotice({ ...newNotice, details: e.target.value })} />
+        {/* media_type removed - admin attaches files directly */}
+  <input id="notice-file" name="notice-file" type="file" onChange={e => setNewNotice({ ...newNotice, file: e.target.files[0] })} />
+  <button className={styles.btnPrimary} onClick={handleCreateNotice}>Create</button>
+      </section>
+
+      <section>
+        <h3>Site Info (About & Quick Links)</h3>
+        <div>
+          <label htmlFor="site-about">About text</label>
+          <textarea id="site-about" className={styles.formInput} value={siteInfo.about} onChange={e => setSiteInfoState({ ...siteInfo, about: e.target.value })} />
+        </div>
+        <div style={{ marginTop: 8 }}>
+          <h4>Quick Links</h4>
+          <small>Enter label and path, then click Add</small>
+          <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+            <input id="ql-label" name="ql-label" placeholder="Label" className={styles.formInput} style={{ flex: 1 }} />
+            <input id="ql-to" name="ql-to" placeholder="/path" className={styles.formInput} style={{ flex: 1 }} />
+            <button className={styles.btnPrimary} onClick={() => {
+              setQuickLinkError('');
+              const lbl = document.getElementById('ql-label').value.trim();
+              const to = document.getElementById('ql-to').value.trim();
+              if (!lbl) { setQuickLinkError('Label is required'); setToastVariant('error'); setToastMsg('Label is required'); return; }
+              if (!to) { setQuickLinkError('Path is required'); setToastVariant('error'); setToastMsg('Path is required'); return; }
+              if (!to.startsWith('/')) { setQuickLinkError('Path must start with /'); setToastVariant('error'); setToastMsg('Path must start with /'); return; }
+              const next = { ...siteInfo, quickLinks: [...(siteInfo.quickLinks || []), { label: lbl, to }] };
+              setSiteInfo(next);
+              setSiteInfoState(next);
+              document.getElementById('ql-label').value = '';
+              document.getElementById('ql-to').value = '';
+              setToastVariant('success'); setToastMsg('Quick link added');
+            }}>Add</button>
+          </div>
+          {quickLinkError && <div className={styles.validationError}>{quickLinkError}</div>}
+
+          <div style={{ marginTop: 12 }}>
+            <ul>
+              {(siteInfo.quickLinks || []).map((q, i) => (
+                <li key={i} style={{ marginBottom: 6, display: 'flex', gap: 8, alignItems: 'center' }}>
+                  <input className={styles.formInput} value={q.label} onChange={e => {
+                    const copy = JSON.parse(JSON.stringify(siteInfo));
+                    copy.quickLinks[i].label = e.target.value;
+                    setSiteInfoState(copy);
+                  }} style={{ flex: 1 }} />
+                  <input className={styles.formInput} value={q.to} onChange={e => {
+                    const copy = JSON.parse(JSON.stringify(siteInfo));
+                    copy.quickLinks[i].to = e.target.value;
+                    setSiteInfoState(copy);
+                  }} style={{ flex: 1 }} />
+                  <button className={styles.btnPrimary} onClick={() => { setSiteInfo(siteInfo); setToastVariant('success'); setToastMsg('Quick links updated'); }}>Save</button>
+                  <button className={styles.btnDanger} onClick={() => { setConfirmIndex(i); setConfirmOpen(true); }}>Remove</button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div style={{ marginTop: 8 }}>
+            <button className={styles.btnPrimary} onClick={() => { setSiteInfo(siteInfo); setToastMsg('Site info saved'); setTimeout(() => setToastMsg(''), 3000); }}>Save Site Info</button>
+          </div>
+        </div>
+      </section>
+
+      <ConfirmModal open={confirmOpen} title="Remove Quick Link" message="Are you sure you want to remove this quick link?" onCancel={() => { setConfirmOpen(false); setConfirmIndex(null); }} onConfirm={() => {
+        if (confirmIndex === null) { setConfirmOpen(false); return; }
+        const copy = JSON.parse(JSON.stringify(siteInfo));
+        copy.quickLinks.splice(confirmIndex, 1);
+        setSiteInfoState(copy);
+        setSiteInfo(copy);
+        setConfirmOpen(false);
+        setConfirmIndex(null);
+        setToastMsg('Quick link removed');
+        setTimeout(() => setToastMsg(''), 3000);
+      }} />
+
+      <Toast message={toastMsg} onClose={() => setToastMsg('')} />
+
+      <section id="active-news">
         <h3>Active News</h3>
         <div className={styles.grid}>
           {news.map(n => (
@@ -245,7 +349,7 @@ export function AdminDashboard() {
         </div>
       </section>
 
-      <section>
+      <section id="students">
         <h3>Register Student</h3>
   <input id="student-name" name="student-name" className={styles.formInput} placeholder="Name" value={newStudent.name} onChange={e => setNewStudent({ ...newStudent, name: e.target.value })} />
   <input id="student-reg" name="student-reg" className={styles.formInput} placeholder="Reg Number" value={newStudent.reg_number} onChange={e => setNewStudent({ ...newStudent, reg_number: e.target.value })} />
@@ -292,7 +396,7 @@ export function AdminDashboard() {
         }}>Add Result</button>
       </section>
 
-      <section>
+      <section id="admins">
         <h3>Add Admin</h3>
   <input id="admin-name" name="admin-name" className={styles.formInput} placeholder="Name" value={newAdmin.name} onChange={e => setNewAdmin({ ...newAdmin, name: e.target.value })} />
   <input id="admin-email" name="admin-email" className={styles.formInput} placeholder="Email" value={newAdmin.email} onChange={e => setNewAdmin({ ...newAdmin, email: e.target.value })} autoComplete="email" />

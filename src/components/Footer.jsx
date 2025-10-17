@@ -1,9 +1,12 @@
 import React from 'react';
+import styles from '../styles/global.module.css';
 
 export default function Footer() {
   return (
-    <footer style={{ padding: 12, borderTop: '1px solid #eee', marginTop: 24 }}>
-      <small>© {new Date().getFullYear()} Student Info Board</small>
+    <footer className={styles.footer}>
+      <div className={styles.container}>
+        <small>© {new Date().getFullYear()} Desinfo. All rights reserved.</small>
+      </div>
     </footer>
   );
 }

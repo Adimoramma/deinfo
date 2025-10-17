@@ -11,6 +11,7 @@ function AdminLogin() {
   const handleLogin = (e) => {
     e.preventDefault();
     // Development/demo: no authentication, just navigate to admin dashboard
+    try { localStorage.setItem('dev_admin', 'true'); } catch (e) { /* ignore */ }
     navigate('/admin');
   };
 

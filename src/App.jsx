@@ -1,6 +1,7 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
+import AboutQuickLinks from './components/AboutQuickLinks.jsx';
 import Home from './pages/Home';
 import Events from './pages/Events.jsx';
 import Announcements from './pages/Announcements.jsx';
@@ -14,12 +15,15 @@ import ProtectedRoute from './components/ProtectedRoute';
 import StudentPortal from './pages/StudentPortal';
 import AdminReset from './pages/AdminReset';
 import DebugSupabase from './pages/DebugSupabase';
+import styles from './styles/global.module.css';
 
 
-function App() {
+function MainRouter() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
   return (
-    <BrowserRouter>
-      <Navbar />
+    <>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<Events />} />
@@ -34,11 +38,35 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/reset" element={<AdminReset />} />
-  <Route path="/debug-supabase" element={<DebugSupabase />} />
+        <Route path="/debug-supabase" element={<DebugSupabase />} />
         <Route path="/notice/:id" element={<NoticeDetail />} />
       </Routes>
-      <Footer />
+
+      {/* show About + Quick Links on all non-admin pages above the footer */}
+      {!isAdminRoute && <AboutQuickLinks />}
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppInner />
     </BrowserRouter>
+  );
+}
+
+function AppInner() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+  return (
+    <div className={styles.appShell}>
+      {!isAdminRoute && <Navbar />}
+      <main className={styles.mainContent}>
+        <MainRouter />
+      </main>
+      <Footer />
+    </div>
   );
 }
 

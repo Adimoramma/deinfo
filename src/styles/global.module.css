@@ -147,3 +147,120 @@ button, .btnPrimary, .btnDanger {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
 }
+
+/* App layout */
+.appShell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.mainContent {
+  flex: 1 1 auto;
+}
+
+.adminHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  background: white;
+}
+.navLeft { display: flex; align-items: center; gap: 0.75rem; }
+.navRight { display: flex; align-items: center; gap: 0.5rem; }
+.brand {
+  font-weight: 700;
+  color: #1f7a3a;
+  text-decoration: none;
+  margin-right: 0.5rem;
+}
+.navLink { text-decoration: none; color: #333; }
+.activeLink { text-decoration: none; color: #1f7a3a; font-weight: 700; }
+
+/* About + Quick links section shown above the footer */
+.aboutSection {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border-top: 1px solid rgba(0,0,0,0.03);
+  background: linear-gradient(180deg, rgba(31,122,58,0.02), rgba(0,0,0,0.01));
+}
+.aboutBox { flex: 2; }
+.quickLinks { flex: 1; }
+.quickLinks ul { margin: 0; padding-left: 1rem; }
+.quickLinks li { margin-bottom: 0.5rem; }
+
+/* Footer */
+.footer {
+  border-top: 1px solid rgba(0,0,0,0.06);
+  background: #fafafa;
+  padding: 0.5rem 0;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  right: 16px;
+  bottom: 80px;
+  background: #1f7a3a;
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  z-index: 9999;
+}
+
+.toast-info { background: #1f7a3a; }
+.toast-success { background: #2ecc71; }
+.toast-warning { background: #f39c12; }
+.toast-error { background: #c0392b; }
+
+.validationError { color: #c0392b; font-size: 0.9rem; margin-top: 6px; }
+
+.smallLink {
+  background: transparent;
+  border: none;
+  color: #1f7a3a;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+
+/* flash highlight for scrolled-to sections */
+.flashHighlight {
+  animation: flash-bg 1.2s ease-in-out;
+}
+@keyframes flash-bg {
+  0% { background-color: rgba(31,122,58,0.18); }
+  50% { background-color: rgba(31,122,58,0.06); }
+  100% { background-color: transparent; }
+}
+
+/* Modal */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+.modal {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  max-width: 420px;
+  width: 100%;
+}
+
