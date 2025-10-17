@@ -29,7 +29,7 @@ function Results() {
       </div>
 
       <form className={styles.resultsForm} onSubmit={handleSubmit}>
-        <input className={styles.formInput} value={regNumber} onChange={e => setRegNumber(e.target.value)} placeholder="Enter Reg Number" />
+        <input id="results-reg" name="results-reg" className={styles.formInput} value={regNumber} onChange={e => setRegNumber(e.target.value)} placeholder="Enter Reg Number" autoComplete="off" />
         <button className={styles.btnPrimary} type="submit">View Results</button>
       </form>
 

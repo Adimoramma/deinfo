@@ -65,10 +65,13 @@ function StudentPortal() {
       {!student ? (
         <form onSubmit={handleLogin} style={{ maxWidth: 420 }}>
           <input
+            id="portal-reg"
+            name="portal-reg"
             className={styles.formInput}
             value={regNumber}
             onChange={(e) => setRegNumber(e.target.value)}
             placeholder="Enter Registration Number"
+            autoComplete="off"
           />
           <button className={styles.btnPrimary} type="submit">Login</button>
         </form>

@@ -25,20 +25,26 @@ function AdminLogin() {
 
       <form onSubmit={handleLogin} style={{ maxWidth: 480 }}>
         <input
+          id="admin-email"
+          name="admin-email"
           className={styles.formInput}
           type="email"
           placeholder="Admin Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          autoComplete="email"
         />
         <input
+          id="admin-password"
+          name="admin-password"
           className={styles.formInput}
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          autoComplete="current-password"
         />
         <button className={styles.btnPrimary} type="submit">Login</button>
       </form>

@@ -165,19 +165,19 @@ export function AdminDashboard() {
 
       <section>
         <h3>Create News</h3>
-  <input className={styles.formInput} placeholder="Title" value={newNotice.title} onChange={e => setNewNotice({ ...newNotice, title: e.target.value })} />
-  <input className={styles.formInput} placeholder="Summary" value={newNotice.summary} onChange={e => setNewNotice({ ...newNotice, summary: e.target.value })} />
+  <input id="notice-title" name="notice-title" className={styles.formInput} placeholder="Title" value={newNotice.title} onChange={e => setNewNotice({ ...newNotice, title: e.target.value })} />
+  <input id="notice-summary" name="notice-summary" className={styles.formInput} placeholder="Summary" value={newNotice.summary} onChange={e => setNewNotice({ ...newNotice, summary: e.target.value })} />
   <textarea className={styles.formInput} placeholder="Details" value={newNotice.details} onChange={e => setNewNotice({ ...newNotice, details: e.target.value })} />
         {/* media_type removed - admin attaches files directly */}
-        <input type="file" onChange={e => setNewNotice({ ...newNotice, file: e.target.files[0] })} />
+  <input id="notice-file" name="notice-file" type="file" onChange={e => setNewNotice({ ...newNotice, file: e.target.files[0] })} />
   <button className={styles.btnPrimary} onClick={handleCreateNotice}>Create</button>
       </section>
 
       <section>
         <h3>Events</h3>
-  <input className={styles.formInput} placeholder="Title" value={newEvent.title} onChange={e => setNewEvent({ ...newEvent, title: e.target.value })} />
-  <input className={styles.formInput} placeholder="Date" type="date" value={newEvent.date} onChange={e => setNewEvent({ ...newEvent, date: e.target.value })} />
-  <input className={styles.formInput} placeholder="Description" value={newEvent.description} onChange={e => setNewEvent({ ...newEvent, description: e.target.value })} />
+  <input id="event-title" name="event-title" className={styles.formInput} placeholder="Title" value={newEvent.title} onChange={e => setNewEvent({ ...newEvent, title: e.target.value })} />
+  <input id="event-date" name="event-date" className={styles.formInput} placeholder="Date" type="date" value={newEvent.date} onChange={e => setNewEvent({ ...newEvent, date: e.target.value })} />
+  <input id="event-desc" name="event-desc" className={styles.formInput} placeholder="Description" value={newEvent.description} onChange={e => setNewEvent({ ...newEvent, description: e.target.value })} />
   <button className={styles.btnPrimary} onClick={handleCreateEvent}>Create Event</button>
 
         <div className={styles.grid} style={{ marginTop: 12 }}>
@@ -185,9 +185,9 @@ export function AdminDashboard() {
             <div key={ev.id} className={styles.notice}>
               {eventEditingId === ev.id ? (
                 <div>
-                  <input value={eventEditData.title} onChange={e => setEventEditData({ ...eventEditData, title: e.target.value })} />
-                  <input type="date" value={eventEditData.date} onChange={e => setEventEditData({ ...eventEditData, date: e.target.value })} />
-                  <input value={eventEditData.description} onChange={e => setEventEditData({ ...eventEditData, description: e.target.value })} />
+                  <input id="event-edit-title" name={`event-edit-title-${eventEditingId}`} value={eventEditData.title} onChange={e => setEventEditData({ ...eventEditData, title: e.target.value })} />
+                  <input id="event-edit-date" name={`event-edit-date-${eventEditingId}`} type="date" value={eventEditData.date} onChange={e => setEventEditData({ ...eventEditData, date: e.target.value })} />
+                  <input id="event-edit-desc" name={`event-edit-desc-${eventEditingId}`} value={eventEditData.description} onChange={e => setEventEditData({ ...eventEditData, description: e.target.value })} />
                   <button onClick={() => saveEditEvent(ev.id)}>Save</button>
                   <button onClick={cancelEditEvent}>Cancel</button>
                 </div>
@@ -224,9 +224,9 @@ export function AdminDashboard() {
             <div key={n.id} className={styles.notice}>
               {newsEditingId === n.id ? (
                 <div>
-                  <input value={newsEditData.title} onChange={e => setNewsEditData({ ...newsEditData, title: e.target.value })} />
-                  <input value={newsEditData.summary} onChange={e => setNewsEditData({ ...newsEditData, summary: e.target.value })} />
-                  <textarea value={newsEditData.details} onChange={e => setNewsEditData({ ...newsEditData, details: e.target.value })} />
+                  <input id="news-edit-title" name={`news-edit-title-${newsEditingId}`} value={newsEditData.title} onChange={e => setNewsEditData({ ...newsEditData, title: e.target.value })} />
+                  <input id="news-edit-summary" name={`news-edit-summary-${newsEditingId}`} value={newsEditData.summary} onChange={e => setNewsEditData({ ...newsEditData, summary: e.target.value })} />
+                  <textarea id="news-edit-details" name={`news-edit-details-${newsEditingId}`} value={newsEditData.details} onChange={e => setNewsEditData({ ...newsEditData, details: e.target.value })} />
                   <button onClick={() => saveEditNews(n.id)}>Save</button>
                   <button onClick={cancelEditNews}>Cancel</button>
                 </div>
@@ -247,9 +247,9 @@ export function AdminDashboard() {
 
       <section>
         <h3>Register Student</h3>
-        <input className={styles.formInput} placeholder="Name" value={newStudent.name} onChange={e => setNewStudent({ ...newStudent, name: e.target.value })} />
-        <input className={styles.formInput} placeholder="Reg Number" value={newStudent.reg_number} onChange={e => setNewStudent({ ...newStudent, reg_number: e.target.value })} />
-        <input className={styles.formInput} placeholder="Email" value={newStudent.email} onChange={e => setNewStudent({ ...newStudent, email: e.target.value })} />
+  <input id="student-name" name="student-name" className={styles.formInput} placeholder="Name" value={newStudent.name} onChange={e => setNewStudent({ ...newStudent, name: e.target.value })} />
+  <input id="student-reg" name="student-reg" className={styles.formInput} placeholder="Reg Number" value={newStudent.reg_number} onChange={e => setNewStudent({ ...newStudent, reg_number: e.target.value })} />
+  <input id="student-email" name="student-email" className={styles.formInput} placeholder="Email" value={newStudent.email} onChange={e => setNewStudent({ ...newStudent, email: e.target.value })} autoComplete="email" />
         <button className={styles.btnPrimary} onClick={async () => {
           await addStudent(newStudent.name, newStudent.reg_number, newStudent.email);
           setNewStudent({ name: '', reg_number: '', email: '' });
@@ -263,8 +263,8 @@ export function AdminDashboard() {
               <li key={s.reg_number}>
                 {studentEditingReg === s.reg_number ? (
                   <span>
-                    <input value={studentEditData.name} onChange={e => setStudentEditData({ ...studentEditData, name: e.target.value })} />
-                    <input value={studentEditData.email} onChange={e => setStudentEditData({ ...studentEditData, email: e.target.value })} />
+                    <input id="student-edit-name" name={`student-edit-name-${s.reg_number}`} value={studentEditData.name} onChange={e => setStudentEditData({ ...studentEditData, name: e.target.value })} />
+                    <input id="student-edit-email" name={`student-edit-email-${s.reg_number}`} value={studentEditData.email} onChange={e => setStudentEditData({ ...studentEditData, email: e.target.value })} autoComplete="email" />
                     <button onClick={() => saveEditStudent(s.reg_number)}>Save</button>
                     <button onClick={cancelEditStudent}>Cancel</button>
                   </span>
@@ -283,9 +283,9 @@ export function AdminDashboard() {
 
       <section>
         <h3>Enter Result</h3>
-        <input className={styles.formInput} placeholder="Reg Number" value={newResult.reg_number} onChange={e => setNewResult({ ...newResult, reg_number: e.target.value })} />
-        <input className={styles.formInput} placeholder="Course Code" value={newResult.course_code} onChange={e => setNewResult({ ...newResult, course_code: e.target.value })} />
-        <input className={styles.formInput} placeholder="Grade" value={newResult.grade} onChange={e => setNewResult({ ...newResult, grade: e.target.value })} />
+  <input id="result-reg" name="result-reg" className={styles.formInput} placeholder="Reg Number" value={newResult.reg_number} onChange={e => setNewResult({ ...newResult, reg_number: e.target.value })} />
+  <input id="result-course" name="result-course" className={styles.formInput} placeholder="Course Code" value={newResult.course_code} onChange={e => setNewResult({ ...newResult, course_code: e.target.value })} />
+  <input id="result-grade" name="result-grade" className={styles.formInput} placeholder="Grade" value={newResult.grade} onChange={e => setNewResult({ ...newResult, grade: e.target.value })} />
         <button className={styles.btnPrimary} onClick={() => {
           addResult(newResult.reg_number, newResult.course_code, newResult.grade);
           setNewResult({ reg_number: '', course_code: '', grade: '' });
@@ -294,9 +294,9 @@ export function AdminDashboard() {
 
       <section>
         <h3>Add Admin</h3>
-        <input className={styles.formInput} placeholder="Name" value={newAdmin.name} onChange={e => setNewAdmin({ ...newAdmin, name: e.target.value })} />
-        <input className={styles.formInput} placeholder="Email" value={newAdmin.email} onChange={e => setNewAdmin({ ...newAdmin, email: e.target.value })} />
-        <input className={styles.formInput} placeholder="Password" type="password" value={newAdmin.password} onChange={e => setNewAdmin({ ...newAdmin, password: e.target.value })} />
+  <input id="admin-name" name="admin-name" className={styles.formInput} placeholder="Name" value={newAdmin.name} onChange={e => setNewAdmin({ ...newAdmin, name: e.target.value })} />
+  <input id="admin-email" name="admin-email" className={styles.formInput} placeholder="Email" value={newAdmin.email} onChange={e => setNewAdmin({ ...newAdmin, email: e.target.value })} autoComplete="email" />
+  <input id="admin-password" name="admin-password" className={styles.formInput} placeholder="Password" type="password" value={newAdmin.password} onChange={e => setNewAdmin({ ...newAdmin, password: e.target.value })} autoComplete="new-password" />
         <button className={styles.btnPrimary} onClick={() => {
           addAdmin(newAdmin.name, newAdmin.email, newAdmin.password);
           setNewAdmin({ name: '', email: '', password: '' });
@@ -310,7 +310,7 @@ export function AdminDashboard() {
           <div key={a.email}>
             {adminEditingEmail === a.email ? (
               <span>
-                <input value={adminEditData.name} onChange={e => setAdminEditData({ ...adminEditData, name: e.target.value })} />
+                <input id={`admin-edit-name-${a.email}`} name={`admin-edit-name-${a.email}`} value={adminEditData.name} onChange={e => setAdminEditData({ ...adminEditData, name: e.target.value })} />
                 <button onClick={() => saveEditAdmin(a.email)}>Save</button>
                 <button onClick={cancelEditAdmin}>Cancel</button>
               </span>

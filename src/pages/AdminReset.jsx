@@ -22,11 +22,14 @@ function AdminReset() {
       ) : (
         <form onSubmit={handleReset}>
           <input
+            id="reset-email"
+            name="reset-email"
             type="email"
             placeholder="Admin Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            autoComplete="email"
           />
           <button type="submit">Send Reset Link</button>
         </form>
