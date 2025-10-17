@@ -35,31 +35,33 @@ export default function DebugSupabase() {
 
   return (
     <main className={styles.container}>
-      <div className={styles.hero}>
-        <div>
-          <h2 className={styles.pageTitle}>Supabase Debug</h2>
-          <p className={styles.lead}>Quick diagnostics for Supabase connectivity and `admins` table.</p>
+      <div className={styles.contentCard}>
+        <div className={styles.hero}>
+          <div>
+            <h2 className={styles.pageTitle}>Supabase Debug</h2>
+            <p className={styles.lead}>Quick diagnostics for Supabase connectivity and admins table.</p>
+          </div>
         </div>
+
+        {loading && <p>Loading...</p>}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+
+        <section>
+          <h3>Session</h3>
+          <pre style={{ background: '#f6f6f6', padding: 12 }}>{JSON.stringify(session, null, 2)}</pre>
+        </section>
+
+        <section>
+          <h3>Admins (sample)</h3>
+          {admins && admins.length ? (
+            <ul>
+              {admins.map(a => <li key={a.email}>{a.name} — {a.email}</li>)}
+            </ul>
+          ) : (
+            <p className={styles.muted}>No data</p>
+          )}
+        </section>
       </div>
-
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      <section>
-        <h3>Session</h3>
-        <pre style={{ background: '#f6f6f6', padding: 12 }}>{JSON.stringify(session, null, 2)}</pre>
-      </section>
-
-      <section>
-        <h3>Admins (sample)</h3>
-        {admins ? (
-          <ul>
-            {admins.map(a => <li key={a.email}>{a.name} — {a.email}</li>)}
-          </ul>
-        ) : (
-          <p className={styles.muted}>No data</p>
-        )}
-      </section>
     </main>
   );
 }

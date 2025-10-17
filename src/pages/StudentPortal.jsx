@@ -56,6 +56,7 @@ function StudentPortal() {
 
   return (
     <main className={styles.container}>
+      <div className={styles.contentCard}>
       <div className={styles.hero}>
         <div>
           <h2 className={styles.pageTitle}>Student Portal</h2>
@@ -94,6 +95,8 @@ function StudentPortal() {
         </div>
       )}
       {loading && <p>Loading...</p>}
+      {loading && <p>Loading...</p>}
+      </div>
     </main>
   );
 }

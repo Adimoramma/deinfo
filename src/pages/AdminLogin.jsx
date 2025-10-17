@@ -17,6 +17,7 @@ function AdminLogin() {
 
   return (
     <main className={styles.container}>
+      <div className={styles.contentCard}>
       <div className={styles.hero}>
         <div>
           <h2 className={styles.pageTitle}>Admin Login</h2>
@@ -49,6 +50,7 @@ function AdminLogin() {
         />
         <button className={styles.btnPrimary} type="submit">Login</button>
       </form>
+      </div>
     </main>
   );
 }

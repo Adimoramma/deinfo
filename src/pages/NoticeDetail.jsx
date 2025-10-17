@@ -28,8 +28,8 @@ function NoticeDetail() {
   }, [id]);
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <main className={styles.container}><p className={styles.muted}>{error}</p></main>;
-  if (!notice) return <main className={styles.container}><p className={styles.muted}>Notice not found</p></main>;
+  if (error) return <main className={styles.container}><div className={styles.contentCard}><p className={styles.muted}>{error}</p></div></main>;
+  if (!notice) return <main className={styles.container}><div className={styles.contentCard}><p className={styles.muted}>Notice not found</p></div></main>;
 
   const renderMedia = () => {
     if (!notice.media_url) return null;
@@ -41,6 +41,7 @@ function NoticeDetail() {
 
   return (
     <main className={styles.container}>
+      <div className={styles.contentCard}>
       <div className={styles.hero}>
         <div>
           <h2 className={styles.pageTitle}>{notice.title}</h2>
@@ -51,6 +52,7 @@ function NoticeDetail() {
         <p>{notice.summary}</p>
         {renderMedia()}
         <p style={{ marginTop: 12 }}>{notice.details}</p>
+      </div>
       </div>
     </main>
   );

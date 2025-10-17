@@ -10,13 +10,14 @@ function Home() {
 
   useEffect(() => {
     let mounted = true;
-    getActiveNews().then((data) => { if (mounted) setNews((data || []).slice(0,5)); }).catch(() => {});
-    getEvents().then((data) => { if (mounted) setEvents((data || []).slice(0,5)); }).catch(() => {});
+  getActiveNews().then((data) => { if (mounted) setNews((data || []).slice(0,6)); }).catch(() => {});
+  getEvents().then((data) => { if (mounted) setEvents((data || []).slice(0,6)); }).catch(() => {});
     return () => { mounted = false; };
   }, []);
 
   return (
     <main className={styles.container}>
+      <div className={styles.contentCard}>
       <div className={styles.hero}>
         <div>
           <h2 className={styles.pageTitle}>Student Information Board</h2>
@@ -35,6 +36,9 @@ function Home() {
                 <h3><Link to={`/notice/${item.id}`}>{item.title}</Link></h3>
                 <small>{item.date_posted ? new Date(item.date_posted).toLocaleString() : ''}</small>
                 <p>{item.summary}</p>
+                <div style={{ marginTop: 8 }}>
+                  <Link to={`/notice/${item.id}`}><button className={styles.btnPrimary}>Read More</button></Link>
+                </div>
               </div>
             ))
           )}
@@ -52,11 +56,15 @@ function Home() {
                 <h3>{ev.title}</h3>
                 <small>{ev.date ? new Date(ev.date).toLocaleDateString() : ''}</small>
                 <p>{ev.description}</p>
+                <div style={{ marginTop: 8 }}>
+                  <Link to="/events"><button className={styles.btnPrimary}>Read More</button></Link>
+                </div>
               </div>
             ))
           )}
         </div>
       </section>
+      </div>
     </main>
   );
 }

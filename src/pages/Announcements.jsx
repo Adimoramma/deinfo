@@ -21,6 +21,7 @@ export default function Announcements() {
 
 	return (
 		<main className={styles.container}>
+			<div className={styles.contentCard}>
 			<div className={styles.hero}>
 				<div>
 					<h2 className={styles.pageTitle}>Announcements</h2>
@@ -42,6 +43,7 @@ export default function Announcements() {
 						</div>
 					))
 				)}
+			</div>
 			</div>
 		</main>
 	);

@@ -14,8 +14,9 @@ export function Events() {
 
 	return (
 		<main className={styles.container}>
-			<h2>Events</h2>
-			<div className={styles.grid}>
+			<div className={styles.contentCard}>
+				<h2>Events</h2>
+				<div className={styles.grid}>
 				{events.length === 0 ? (
 					<div className={styles.notice}>
 						<h3>No upcoming events</h3>
@@ -30,6 +31,7 @@ export function Events() {
 						</div>
 					))
 				)}
+				</div>
 			</div>
 		</main>
 	);

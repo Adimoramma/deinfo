@@ -16,6 +16,7 @@ import { uploadMedia } from '../services/uploadService';
 import { useNavigate } from 'react-router-dom';
 import styles from '../styles/global.module.css';
 import AdminHeader from '../components/AdminHeader';
+import AdminAnalytics from '../components/AdminAnalytics';
 import Toast from '../components/Toast';
 import ConfirmModal from '../components/ConfirmModal';
 
@@ -40,6 +41,17 @@ export function AdminDashboard() {
       el.classList.add(styles.flashHighlight);
       setTimeout(() => { el.classList.remove(styles.flashHighlight); }, 1400);
     } catch (e) { /* ignore */ }
+  };
+
+  const handleAnalyticsView = (key) => {
+    const map = {
+      news: 'active-news',
+      students: 'students',
+      admins: 'admins',
+      events: 'events',
+    };
+    const id = map[key] || key;
+    scrollToSection(id);
   };
 
   const [newNotice, setNewNotice] = useState({
@@ -180,7 +192,9 @@ export function AdminDashboard() {
 
   return (
     <main className={styles.container}>
+      <div className={styles.contentCard}>
       <AdminHeader title="Admin Dashboard" subtitle="Manage announcements, events, students, and admins" onLogout={handleLogout} />
+      <AdminAnalytics counts={{ news: news.length, students: students.length, admins: admins.length, events: events.length }} onView={handleAnalyticsView} />
 
       <section id="events">
         <h3>Events</h3>
@@ -215,31 +229,7 @@ export function AdminDashboard() {
           ))}
         </div>
       </section>
-      <section>
-        <h3>Analytics</h3>
-        <div className={styles.grid}>
-          <div className={styles.notice}>
-            <h3>News</h3>
-            <p>{news.length}</p>
-            <div><button className={styles.smallLink} onClick={() => scrollToSection('active-news')}>View News</button></div>
-          </div>
-          <div className={styles.notice}>
-            <h3>Students</h3>
-            <p>{students.length}</p>
-            <div><button className={styles.smallLink} onClick={() => scrollToSection('students')}>View Students</button></div>
-          </div>
-          <div className={styles.notice}>
-            <h3>Admins</h3>
-            <p>{admins.length}</p>
-            <div><button className={styles.smallLink} onClick={() => scrollToSection('admins')}>View Admins</button></div>
-          </div>
-          <div className={styles.notice}>
-            <h3>Events</h3>
-            <p>{events.length}</p>
-            <div><button className={styles.smallLink} onClick={() => scrollToSection('events')}>View Events</button></div>
-          </div>
-        </div>
-      </section>
+      
 
       <section>
         <h3>Create News</h3>
@@ -428,6 +418,7 @@ export function AdminDashboard() {
           </div>
         ))}
       </section>
+      </div>
     </main>
   );
 }

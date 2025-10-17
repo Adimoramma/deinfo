@@ -4,6 +4,7 @@ import styles from '../styles/global.module.css';
 export function Archive() {
 	return (
 		<main className={styles.container}>
+			<div className={styles.contentCard}>
 						<div className={styles.hero}>
 							<div>
 								<h2 className={styles.pageTitle}>Archive</h2>
@@ -15,6 +16,7 @@ export function Archive() {
 										<h3>Old Announcement</h3>
 					<p>Archived notices and events will appear here.</p>
 				</div>
+			</div>
 			</div>
 		</main>
 	);

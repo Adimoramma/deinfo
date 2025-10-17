@@ -21,6 +21,7 @@ function Results() {
 
   return (
     <main className={styles.container}>
+      <div className={styles.contentCard}>
       <div className={styles.hero}>
         <div>
           <h2 className={styles.pageTitle}>Check Your Results</h2>
@@ -51,6 +52,7 @@ function Results() {
           </div>
         </div>
       )}
+      </div>
     </main>
   );
 }

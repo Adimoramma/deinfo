@@ -15,7 +15,8 @@ function AdminReset() {
   };
 
   return (
-    <main>
+    <main className={styles.container}>
+      <div className={styles.contentCard}>
       <h2>Reset Admin Password</h2>
       {sent ? (
         <p>Password reset link sent to {email}</p>
@@ -34,6 +35,7 @@ function AdminReset() {
           <button type="submit">Send Reset Link</button>
         </form>
       )}
+      </div>
     </main>
   );
 }
