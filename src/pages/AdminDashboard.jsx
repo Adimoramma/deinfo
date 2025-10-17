@@ -90,10 +90,24 @@ export function AdminDashboard() {
   };
 
   const handleCreateNotice = async () => {
-    let media_url = '';
+    let media_url = null;
     if (newNotice.file) {
-      media_url = await uploadMedia(newNotice.file);
+      try {
+        const url = await uploadMedia(newNotice.file);
+        if (!url) {
+          // uploadMedia returns null when bucket not found or upload skipped
+          setToastVariant('warning');
+          setToastMsg('File upload skipped: storage bucket not found or upload disabled');
+        } else {
+          media_url = url;
+        }
+      } catch (err) {
+        console.error('upload error', err);
+        setToastVariant('error');
+        setToastMsg('File upload failed: ' + (err.message || 'unknown'));
+      }
     }
+
     await createNotice({
       ...newNotice,
       media_url,
@@ -250,21 +264,24 @@ export function AdminDashboard() {
         <div style={{ marginTop: 8 }}>
           <h4>Quick Links</h4>
           <small>Enter label and path, then click Add</small>
-          <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+          <div style={{ display: 'flex', gap: 8, marginTop: 8, alignItems: 'center' }}>
             <input id="ql-label" name="ql-label" placeholder="Label" className={styles.formInput} style={{ flex: 1 }} />
             <input id="ql-to" name="ql-to" placeholder="/path" className={styles.formInput} style={{ flex: 1 }} />
+            <input id="ql-desc" name="ql-desc" placeholder="Short description (optional)" className={styles.formInput} style={{ flex: 1 }} />
             <button className={styles.btnPrimary} onClick={() => {
               setQuickLinkError('');
               const lbl = document.getElementById('ql-label').value.trim();
               const to = document.getElementById('ql-to').value.trim();
+              const desc = document.getElementById('ql-desc').value.trim();
               if (!lbl) { setQuickLinkError('Label is required'); setToastVariant('error'); setToastMsg('Label is required'); return; }
               if (!to) { setQuickLinkError('Path is required'); setToastVariant('error'); setToastMsg('Path is required'); return; }
               if (!to.startsWith('/')) { setQuickLinkError('Path must start with /'); setToastVariant('error'); setToastMsg('Path must start with /'); return; }
-              const next = { ...siteInfo, quickLinks: [...(siteInfo.quickLinks || []), { label: lbl, to }] };
+              const next = { ...siteInfo, quickLinks: [...(siteInfo.quickLinks || []), { label: lbl, to, description: desc }] };
               setSiteInfo(next);
               setSiteInfoState(next);
               document.getElementById('ql-label').value = '';
               document.getElementById('ql-to').value = '';
+              document.getElementById('ql-desc').value = '';
               setToastVariant('success'); setToastMsg('Quick link added');
             }}>Add</button>
           </div>
@@ -282,6 +299,11 @@ export function AdminDashboard() {
                   <input className={styles.formInput} value={q.to} onChange={e => {
                     const copy = JSON.parse(JSON.stringify(siteInfo));
                     copy.quickLinks[i].to = e.target.value;
+                    setSiteInfoState(copy);
+                  }} style={{ flex: 1 }} />
+                  <input className={styles.formInput} value={q.description || ''} placeholder="Short description" onChange={e => {
+                    const copy = JSON.parse(JSON.stringify(siteInfo));
+                    copy.quickLinks[i].description = e.target.value;
                     setSiteInfoState(copy);
                   }} style={{ flex: 1 }} />
                   <button className={styles.btnPrimary} onClick={() => { setSiteInfo(siteInfo); setToastVariant('success'); setToastMsg('Quick links updated'); }}>Save</button>

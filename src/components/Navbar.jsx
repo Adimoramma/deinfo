@@ -4,6 +4,7 @@ import { useAuth } from '../services/useAuth';
 import { supabase } from '../services/supabaseClient';
 import styles from '../styles/global.module.css';
 import logo from '../assets/logo-accent.svg';
+import logoSm from '../assets/logo-accent-sm.svg';
 import homeIcon from '../assets/icons/home.svg';
 import annIcon from '../assets/icons/announcements.svg';
 import evIcon from '../assets/icons/events.svg';
@@ -32,39 +33,41 @@ export default function Navbar() {
 
   return (
     <nav className={styles.navbar}>
-      <div className={styles.navLeft}>
-        <Link to="/" className={styles.brand} aria-label="Desinfo Home">
-          <img src={logo} alt="Desinfo logo" style={{ height: 36, width: 36, marginRight: 10 }} />
-          Desinfo
-        </Link>
+      <div className={styles.navbarInner}>
+        <div className={styles.navLeft}>
+          <Link to="/" className={styles.brand} aria-label="Desinfo Home">
+            <img src={logo} srcSet={`${logoSm} 48w, ${logo} 96w`} alt="Desinfo logo" style={{ height: 36, width: 36 }} />
+            <span className={styles.navText}>Desinfo</span>
+          </Link>
 
-        {/* Home link should not appear on the home page */}
-        {!isHome && !isAdminRoute && (
-          <NavLink to="/" className={({isActive}) => isActive ? styles.activeLink : styles.navLink}><img src={homeIcon} alt="" style={{ height: 16, marginRight: 6 }} />Home</NavLink>
-        )}
+          {/* Home link should not appear on the home page */}
+          {!isHome && !isAdminRoute && (
+            <NavLink to="/" className={({isActive}) => isActive ? styles.activeLink : styles.navLink}><img src={homeIcon} alt="" style={{ height: 16 }} /><span className={styles.navText}>Home</span></NavLink>
+          )}
 
-        {/* On admin route we only show Home (above) and logout on the right */}
-        {!isAdminRoute && (
-          <>
-            <NavLink to="/announcements" className={({isActive}) => isActive ? styles.activeLink : styles.navLink}><img src={annIcon} alt="" style={{ height: 14, marginRight: 6 }} />Announcements</NavLink>
-            <NavLink to="/events" className={({isActive}) => isActive ? styles.activeLink : styles.navLink}><img src={evIcon} alt="" style={{ height: 14, marginRight: 6 }} />Events</NavLink>
-            <NavLink to="/results" className={({isActive}) => isActive ? styles.activeLink : styles.navLink}><img src={resIcon} alt="" style={{ height: 14, marginRight: 6 }} />Results</NavLink>
-            <NavLink to="/portal" className={({isActive}) => isActive ? styles.activeLink : styles.navLink}>Portal</NavLink>
-            <NavLink to="/archive" className={({isActive}) => isActive ? styles.activeLink : styles.navLink}>Archive</NavLink>
-          </>
-        )}
-      </div>
+          {/* On admin route we only show Home (above) and logout on the right */}
+          {!isAdminRoute && (
+            <>
+              <NavLink to="/announcements" className={({isActive}) => isActive ? styles.activeLink : styles.navLink}><img src={annIcon} alt="" style={{ height: 14 }} /><span className={styles.navText}>Announcements</span></NavLink>
+              <NavLink to="/events" className={({isActive}) => isActive ? styles.activeLink : styles.navLink}><img src={evIcon} alt="" style={{ height: 14 }} /><span className={styles.navText}>Events</span></NavLink>
+              <NavLink to="/results" className={({isActive}) => isActive ? styles.activeLink : styles.navLink}><img src={resIcon} alt="" style={{ height: 14 }} /><span className={styles.navText}>Results</span></NavLink>
+              <NavLink to="/portal" className={({isActive}) => isActive ? styles.activeLink : styles.navLink}><img src={homeIcon} alt="" style={{ height: 14 }} /><span className={styles.navText}>Portal</span></NavLink>
+              <NavLink to="/archive" className={({isActive}) => isActive ? styles.activeLink : styles.navLink}><img src={annIcon} alt="" style={{ height: 14 }} /><span className={styles.navText}>Archive</span></NavLink>
+            </>
+          )}
+        </div>
 
-      <div className={styles.navRight}>
-        {isAdminRoute ? (
-          <button onClick={handleLogout} className={styles.btnPrimary}><img src={logoutIcon} alt="" style={{ height: 14, marginRight: 6 }} />Logout</button>
-        ) : (
-          session && isAdmin ? (
-            <NavLink to="/admin" className={({isActive}) => isActive ? styles.activeLink : styles.navLink}>Admin Dashboard</NavLink>
+        <div className={styles.navRight}>
+          {isAdminRoute ? (
+            <button onClick={handleLogout} className={styles.btnPrimary}><img src={logoutIcon} alt="" style={{ height: 14 }} /><span className={styles.navText}>Logout</span></button>
           ) : (
-            <NavLink to="/login" className={({isActive}) => isActive ? styles.activeLink : styles.navLink}>Admin Login</NavLink>
-          )
-        )}
+            session && isAdmin ? (
+              <NavLink to="/admin" className={({isActive}) => isActive ? styles.activeLink : styles.navLink}><img src={logoutIcon} alt="" style={{ height: 14 }} /><span className={styles.navText}>Admin</span></NavLink>
+            ) : (
+              <NavLink to="/login" className={({isActive}) => isActive ? styles.activeLink : styles.navLink}><img src={logoutIcon} alt="" style={{ height: 14 }} /><span className={styles.navText}>Admin Login</span></NavLink>
+            )
+          )}
+        </div>
       </div>
     </nav>
   );

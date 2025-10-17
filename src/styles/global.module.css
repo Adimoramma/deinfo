@@ -94,6 +94,41 @@ button, .btnPrimary, .btnDanger {
   gap: 1rem;
 }
 
+/* hero image sizing and responsive layout */
+.hero img {
+  height: 96px;
+  width: auto;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* admin header: ensure the small decorative image fits and hides on small screens */
+.adminHeader img {
+  height: 42px;
+  width: auto;
+  border-radius: 8px;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    gap: 12px;
+  }
+  .hero img { height: 80px; }
+}
+
+@media (max-width: 700px) {
+  /* stack hero content and reduce image prominence on small screens */
+  .hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .hero img { height: 56px; align-self: center; }
+  /* hide the decorative admin header image on very small screens */
+  .adminHeader img { display: none; }
+  .contentCard { padding: 0.75rem; }
+}
+
 .formInput {
   width: 100%;
   padding: 0.6rem 0.75rem;
@@ -194,6 +229,19 @@ button, .btnPrimary, .btnDanger {
 }
 .navLeft { display: flex; align-items: center; gap: 0.75rem; }
 .navRight { display: flex; align-items: center; gap: 0.5rem; }
+/* constrain navbar content so it doesn't overstretch on large screens */
+.navbarInner { max-width: 1100px; width: 100%; display: flex; justify-content: space-between; align-items: center; margin: 0 auto; }
+.navLeft { flex: 1 1 auto; }
+.navRight { flex: 0 0 auto; }
+.navText { display: inline-block; margin-left: 8px; }
+
+/* On small screens, hide the nav text and show icons only to save space */
+@media (max-width: 700px) {
+  .navText { display: none; }
+  /* tighten navbar padding on small screens */
+  .navbar { padding: 8px 12px; }
+  .brand img { height: 30px; width: auto; }
+}
 .brand {
   font-weight: 700;
   color: white;
@@ -210,12 +258,16 @@ button, .btnPrimary, .btnDanger {
   padding: 1rem;
   border-top: 1px solid rgba(0,0,0,0.03);
   background: linear-gradient(180deg, rgba(31,122,58,0.02), rgba(0,0,0,0.01));
-  align-items: stretch; /* ensure children match height */
+  align-items: center; /* vertically center children */
 }
-.aboutBox { flex: 1; display:flex; flex-direction:column; }
+.aboutBox { flex: 1; display:flex; flex-direction:column; background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,255,250,0.98)); padding: 1rem; border-radius: 12px; border: 1px solid rgba(15,48,30,0.04); }
 .quickLinks { flex: 1; display:flex; flex-direction:column; }
 .quickLinks ul { margin: 0; padding-left: 1rem; }
 .quickLinks li { margin-bottom: 0.5rem; }
+
+.linkGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 8px; }
+.linkCard { display: flex; align-items: flex-start; gap: 10px; padding: 0.8rem; border-radius: 10px; text-decoration: none; color: inherit; background: linear-gradient(180deg, #fff, #fbfffb); border: 1px solid rgba(15,48,30,0.04); box-shadow: 0 8px 24px rgba(16,52,24,0.04); transition: transform 140ms ease, box-shadow 160ms ease; }
+.linkCard:hover { transform: translateY(-6px); box-shadow: 0 18px 44px rgba(16,52,24,0.08); }
 
 /* Responsive: stack vertically on small screens */
 @media (max-width: 700px) {
@@ -227,9 +279,12 @@ button, .btnPrimary, .btnDanger {
 /* Footer */
 .footer {
   border-top: 1px solid rgba(0,0,0,0.06);
-  background: #fafafa;
-  padding: 0.5rem 0;
+  background: linear-gradient(180deg, var(--bg-2), var(--bg-1));
+  padding: 0.75rem 0;
 }
+
+/* Ensure header has a clear background color to separate it from page content */
+.navbar { background: linear-gradient(90deg, var(--accent-2), var(--accent-3)); color: white; }
 
 /* variables */
 :root {
@@ -299,7 +354,7 @@ button, .btnPrimary, .btnDanger {
   z-index: 9999;
 }
 
-.toast-info { background: #1f7a3a; }
+.toast-info { background: linear-gradient(90deg, var(--accent-2), var(--accent-3)); }
 .toast-success { background: linear-gradient(90deg, #2ecc71, #27ae60); }
 .toast-warning { background: linear-gradient(90deg, #f39c12, #f1c40f); }
 .toast-error { background: linear-gradient(90deg, #e74c3c, #c0392b); }

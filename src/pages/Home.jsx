@@ -3,6 +3,8 @@ import { getActiveNews } from '../services/newsService';
 import { getEvents } from '../services/eventService';
 import { Link } from 'react-router-dom';
 import styles from '../styles/global.module.css';
+import heroAccent from '../assets/hero-accent.svg';
+import heroAccentSm from '../assets/hero-accent-sm.svg';
 
 function Home() {
   const [news, setNews] = useState([]);
@@ -23,6 +25,7 @@ function Home() {
           <h2 className={styles.pageTitle}>Student Information Board</h2>
           <p className={styles.lead}>Stay updated with announcements, events and results.</p>
         </div>
+  <img src={heroAccent} srcSet={`${heroAccentSm} 480w, ${heroAccent} 960w`} alt="hero decoration" style={{ height: 96, borderRadius: 12 }} />
       </div>
 
       <section style={{ marginBottom: 16 }}>
