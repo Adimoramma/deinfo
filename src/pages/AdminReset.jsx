@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../services/supabaseClient';
+import styles from '../styles/global.module.css';
+
 
 function AdminReset() {
   const [email, setEmail] = useState('');
