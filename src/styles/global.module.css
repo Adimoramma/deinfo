@@ -1,0 +1,36 @@
+.grid {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 600px) and (max-width: 899px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 599px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+.notice {
+  background-color: white;
+  border: 2px solid green;
+  padding: 1rem;
+  border-radius: 8px;
+}
+.notice h3 {
+  color: green;
+}
+.notice button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+}
