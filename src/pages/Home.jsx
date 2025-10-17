@@ -8,9 +8,13 @@ function Home() {
   useEffect(() => { getActiveNews().then(setNews); }, []);
 
   return (
-    <main>
-      <h2 style={{ color: 'green' }}>Welcome to Desinfo</h2>
-      <p>Stay updated with departmental news and results.</p>
+    <main className={styles.container}>
+      <div className={styles.hero}>
+        <div>
+          <h2 className={styles.pageTitle}>Student Information Board</h2>
+          <p className={styles.lead}>Stay updated with announcements, events and results.</p>
+        </div>
+      </div>
       <div className={styles.grid}>
         {news.map(item => (
           <div key={item.id} className={styles.notice}>

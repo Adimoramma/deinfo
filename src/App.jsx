@@ -1,25 +1,19 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+import Navbar from './components/Navbar.jsx';
+import Footer from './components/Footer.jsx';
 import Home from './pages/Home';
-import Events from './pages/Events';
-import Announcements from './pages/Announcements';
-import Archive from './pages/Archive';
+import Events from './pages/Events.jsx';
+import Announcements from './pages/Announcements.jsx';
+import Archive from './pages/Archive.jsx';
 import Results from './pages/Results';
-import AdminLogin from './pages/AdminLogin';
+import AdminLogin from './pages/AdminLogin.jsx';
 import AdminDashboard from './pages/AdminDashboard';
 import NoticeDetail from './pages/NoticeDetail';
 
 import ProtectedRoute from './components/ProtectedRoute';
 import StudentPortal from './pages/StudentPortal';
 import AdminReset from './pages/AdminReset';
-
-
-<Route path="/admin" element={
-  <ProtectedRoute>
-    <AdminDashboard />
-  </ProtectedRoute>
-} />
+import DebugSupabase from './pages/DebugSupabase';
 
 
 function App() {
@@ -34,8 +28,13 @@ function App() {
         <Route path="/results" element={<Results />} />
         <Route path="/portal" element={<StudentPortal />} />
         <Route path="/login" element={<AdminLogin />} />
-        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin" element={
+          <ProtectedRoute requireAdmin>
+            <AdminDashboard />
+          </ProtectedRoute>
+        } />
         <Route path="/reset" element={<AdminReset />} />
+  <Route path="/debug-supabase" element={<DebugSupabase />} />
         <Route path="/notice/:id" element={<NoticeDetail />} />
       </Routes>
       <Footer />

@@ -20,3 +20,8 @@ export async function deleteStudent(reg_number) {
     .eq('reg_number', reg_number);
   if (error) throw error;
 }
+
+export async function updateStudent(reg_number, patch) {
+  const { error } = await supabase.from('students').update(patch).eq('reg_number', reg_number);
+  if (error) throw error;
+}

@@ -33,21 +33,44 @@ function StudentPortal() {
       .select('*')
       .eq('student_id', studentData.id);
 
-    setResults(resultData);
+    setResults(resultData || []);
     setLoading(false);
   };
 
+  // Download results as PDF (has access to student/results state)
+  const handleDownloadPDF = () => {
+    if (!student) return;
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text(`Student: ${student.name}`, 10, 20);
+    doc.text(`Email: ${student.email}`, 10, 30);
+    doc.text('Results:', 10, 40);
+
+    (results || []).forEach((r, i) => {
+      doc.text(`${r.course_code}: ${r.grade}`, 10, 50 + i * 10);
+    });
+
+    const filename = student.reg_number ? `${student.reg_number}_results.pdf` : 'results.pdf';
+    doc.save(filename);
+  };
+
   return (
-    <main>
-      <h2>Student Portal</h2>
+    <main className={styles.container}>
+      <div className={styles.hero}>
+        <div>
+          <h2 className={styles.pageTitle}>Student Portal</h2>
+          <p className={styles.lead}>Enter your registration number to view results.</p>
+        </div>
+      </div>
       {!student ? (
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} style={{ maxWidth: 420 }}>
           <input
+            className={styles.formInput}
             value={regNumber}
             onChange={(e) => setRegNumber(e.target.value)}
             placeholder="Enter Registration Number"
           />
-          <button type="submit">Login</button>
+          <button className={styles.btnPrimary} type="submit">Login</button>
         </form>
       ) : (
         <div>
@@ -62,27 +85,14 @@ function StudentPortal() {
               </div>
             ))}
           </div>
+          <div style={{ marginTop: 16 }}>
+            <button className={styles.btnPrimary} onClick={handleDownloadPDF}>Download Results as PDF</button>
+          </div>
         </div>
       )}
       {loading && <p>Loading...</p>}
     </main>
   );
 }
-const handleDownloadPDF = () => {
-  const doc = new jsPDF();
-  doc.setFontSize(16);
-  doc.text(`Student: ${student.name}`, 10, 20);
-  doc.text(`Email: ${student.email}`, 10, 30);
-  doc.text('Results:', 10, 40);
-
-  results.forEach((r, i) => {
-    doc.text(`${r.course_code}: ${r.grade}`, 10, 50 + i * 10);
-  });
-
-  doc.save(`${student.reg_number}_results.pdf`);
-};
-
-<button onClick={handleDownloadPDF}>Download Results as PDF</button>
-
 
 export default StudentPortal;
